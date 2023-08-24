@@ -14,7 +14,19 @@ class User < ActiveRecord::Base
   validates_presence_of :password, on: :create
   validates_confirmation_of :password
 
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+
+  validates :username, length: { maximum: 40 }
+
+  validates :username, format: { with: /\A[a-zA-Z0-9_]+\z/, message: 'can only contain letters, digits, and underscores' }
+
   before_save :encrypt_password
+
+  before_save :downcase_username
+
+  def downcase_username
+    self.username = username.downcase if username.present?
+  end
 
   def encrypt_password
     if self.password.present?
