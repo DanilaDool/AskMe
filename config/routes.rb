@@ -1,12 +1,10 @@
 Rails.application.routes.draw do
-  root 'users#show'
-
-  resources :users
+  root to: 'users#index'
+  resources :users, expect: [:destroy]
+  resources :sessions, only: [:new, :create, :destroy]
   resources :questions
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  get 'show' => 'users#show'
-
-  # Defines the root path route ("/")
-  # root "articles#index"
+  get 'sign_up' => 'users#new'
+  get 'log_out' => 'sessions#destroy'
+  get 'log_in' => 'sessions#new'
 end
